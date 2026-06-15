@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>© Select — Sheet Setup Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600&family=DM+Sans:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6efe2; --ink: #220b00; --ink-mid: #3d1c08;
+  --tan: #a38a69; --cream: #ead9c8; --linen: #d4d2c2; --muted: #8a7560;
+  --border: rgba(34,11,0,0.10); --border-mid: rgba(34,11,0,0.18);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink-mid); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.75; }
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: repeating-linear-gradient(to bottom,
+    transparent 0px, transparent 21px, rgba(34,11,0,0.06) 21px, rgba(34,11,0,0.06) 22px,
+    transparent 22px, transparent 27px, rgba(34,11,0,0.06) 27px, rgba(34,11,0,0.06) 28px,
+    transparent 28px, transparent 33px, rgba(34,11,0,0.06) 33px, rgba(34,11,0,0.06) 34px,
+    transparent 34px, transparent 39px, rgba(34,11,0,0.06) 39px, rgba(34,11,0,0.06) 40px,
+    transparent 40px, transparent 45px, rgba(34,11,0,0.06) 45px, rgba(34,11,0,0.06) 46px,
+    transparent 46px, transparent 84px);
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 60px 32px 100px; position: relative; z-index: 1; }
+.back { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--tan); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 48px; }
+.back:hover { opacity: .7; }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--tan); margin-bottom: 12px; }
+h1 { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 400; color: var(--ink); line-height: 1.1; letter-spacing: -.02em; margin-bottom: 16px; }
+.subtitle { font-size: 15px; color: var(--ink-mid); max-width: 520px; line-height: 1.8; margin-bottom: 52px; }
+
+/* Steps */
+.step { border-left: 2px solid rgba(34,11,0,0.12); padding: 0 0 40px 28px; position: relative; margin-bottom: 0; }
+.step:last-child { border-left: 2px solid transparent; }
+.step-num {
+  position: absolute; left: -16px; top: 0;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--ink); color: var(--bg);
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 400;
+  display: flex; align-items: center; justify-content: center;
+  letter-spacing: 0;
+}
+.step-num.done { background: var(--tan); }
+.step h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: 10px; }
+.step p { font-size: 14px; color: var(--ink-mid); line-height: 1.85; margin-bottom: 12px; }
+.step p:last-child { margin-bottom: 0; }
+
+.code-block {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 16px 20px;
+  margin: 14px 0;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+.code-block .highlight { color: var(--tan); }
+.code-block .comment { opacity: .4; }
+
+.callout {
+  background: var(--cream);
+  border-left: 3px solid var(--tan);
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+.callout strong { color: var(--ink); font-weight: 500; }
+
+/* Sheet column table */
+.col-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.col-table th { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 2px solid var(--border-mid); }
+.col-table td { font-size: 13px; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--ink-mid); }
+.col-table td:first-child { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--tan); }
+.col-table tr:hover td { background: var(--cream); }
+
+/* Divider */
+.divider { height: 1px; background: var(--border-mid); margin: 48px 0; }
+
+.done-box {
+  background: var(--ink);
+  padding: 32px 28px;
+  color: var(--cream);
+}
+.done-box h3 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 400; color: var(--bg); margin-bottom: 12px; }
+.done-box p { font-size: 14px; line-height: 1.8; color: rgba(246,239,226,0.7); }
+.done-box .note { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--tan); margin-top: 20px; display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a href="index.html" class="back">← &#169; Select Home</a>
+
+  <div class="eyebrow">&#9836; Data Setup</div>
+  <h1>Connect Your Google Sheet</h1>
+  <p class="subtitle">Follow these steps once and your guide updates automatically every time you edit the sheet. No code required after setup.</p>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-num">1</div>
+    <h2>Import the CSV into Google Sheets</h2>
+    <p>Open <strong>Google Sheets</strong> and create a new spreadsheet. Name it <strong>The © Select</strong>.</p>
+    <p>Go to <strong>File → Import → Upload</strong> and upload the file <code>c-select-detroit-spots.csv</code> that came with this package. Import it into the current sheet.</p>
+    <p>Rename the tab at the bottom to exactly: <strong>Detroit</strong></p>
+    <div class="callout"><strong>Important:</strong> The tab name must match exactly — capital D, no spaces before or after. The guide reads from a tab named "Detroit".</div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-num">2</div>
+    <h2>Confirm the column structure</h2>
+    <p>Your sheet should have these 6 columns in this exact order. Don't rename or reorder them.</p>
+    <table class="col-table">
+      <thead><tr><th>Column</th><th>Header</th><th>What goes here</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>Name</td><td>The spot's name</td><td>Leila</td></tr>
+        <tr><td>B</td><td>Category</td><td>Must match exactly: Breakfast, Lunch, Dinner, Bar, Cafes, Hotel Lobbies, Sports Bars, Golf, Parties, Coworking, Attractions, Shopping</td><td>Dinner</td></tr>
+        <tr><td>C</td><td>Top Pick</td><td>TRUE or FALSE — top picks float to the top of each section</td><td>TRUE</td></tr>
+        <tr><td>D</td><td>Badge</td><td>Short label shown on the card. Leave blank for none.</td><td>Top Pick</td></tr>
+        <tr><td>E</td><td>My Take</td><td>Your personal description. Keep it one sentence.</td><td>The best dinner in Detroit right now.</td></tr>
+        <tr><td>F</td><td>Tags</td><td>Comma-separated. 2–3 max.</td><td>Middle Eastern, Must Reserve</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-num">3</div>
+    <h2>Make the sheet publicly readable</h2>
+    <p>The guide fetches your sheet data — so the sheet needs to be accessible. Click <strong>Share</strong> (top right), then <strong>Change to anyone with the link</strong>, set it to <strong>Viewer</strong>.</p>
+    <div class="callout"><strong>Viewer only</strong> — nobody can edit your sheet, they can only read it. Your data stays yours.</div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-num">4</div>
+    <h2>Copy your Sheet ID</h2>
+    <p>Look at your browser's address bar when the sheet is open. The URL looks like this:</p>
+    <div class="code-block">https://docs.google.com/spreadsheets/d/<span class="highlight">1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms</span>/edit</div>
+    <p>The long string between <code>/d/</code> and <code>/edit</code> is your Sheet ID. Copy it.</p>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step">
+    <div class="step-num">5</div>
+    <h2>Paste it into the guide</h2>
+    <p>Open <code>detroit-guide.html</code> in a text editor. Near the top of the <code>&lt;script&gt;</code> section, find this line:</p>
+    <div class="code-block">const SHEET_ID = <span class="highlight">'YOUR_SHEET_ID_HERE'</span>;</div>
+    <p>Replace <code>YOUR_SHEET_ID_HERE</code> with your actual Sheet ID:</p>
+    <div class="code-block">const SHEET_ID = <span class="highlight">'1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms'</span>; <span class="comment">// your real ID</span></div>
+    <p>Save the file. That's it.</p>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step">
+    <div class="step-num">6</div>
+    <h2>Test it</h2>
+    <p>Open <code>index.html</code> in your browser and click Detroit. The guide should load your spots from the sheet. You'll see a small status indicator in the top right of the masthead:</p>
+    <div class="callout">
+      <strong style="color:#4a7c59;">● live · 167 spots</strong> — Sheet is connected and loading correctly.<br><br>
+      <strong style="color:var(--tan);">● local data</strong> — Sheet ID not yet set, using built-in fallback data.<br><br>
+      <strong style="color:var(--tan);">● offline · local data</strong> — Sheet couldn't be reached, falling back. Check that sharing is set to public.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- HOW TO UPDATE -->
+  <div class="eyebrow" style="margin-bottom:16px;">&#9836; Day-to-Day Updates</div>
+  <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:var(--ink);margin-bottom:24px;">How to add or edit a spot</h2>
+
+  <p style="font-size:14px;line-height:1.85;margin-bottom:16px;"><strong style="color:var(--ink);">Add a spot:</strong> Open your Google Sheet, scroll to the bottom of the relevant category, add a new row. Fill in all 6 columns. Reload the guide — it's live.</p>
+
+  <p style="font-size:14px;line-height:1.85;margin-bottom:16px;"><strong style="color:var(--ink);">Edit a take:</strong> Click the cell in column E and type your new description. Save. Done.</p>
+
+  <p style="font-size:14px;line-height:1.85;margin-bottom:16px;"><strong style="color:var(--ink);">Promote to Top Pick:</strong> Change column C from FALSE to TRUE. The spot will float to the top of its category automatically.</p>
+
+  <p style="font-size:14px;line-height:1.85;margin-bottom:32px;"><strong style="color:var(--ink);">Remove a spot:</strong> Delete the row from the sheet. It disappears from the guide on next load.</p>
+
+  <div class="callout">
+    <strong>Tip:</strong> The guide fetches fresh data every time someone opens the Detroit page. No rebuilding, no re-uploading. Edit the sheet, and anyone who opens the guide next sees the update.
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="done-box">
+    <h3>You're set. &#9836;</h3>
+    <p>Your guide now has a live data source. Every spot, take, tag, and ranking lives in one place — your Google Sheet. Add a city, update a take, promote a new favorite. The guide stays current automatically.</p>
+    <span class="note">&#169; Select &mdash; Curated &amp; Opinionated &mdash; No Sponsors</span>
+  </div>
+
+</div>
+</body>
+</html>
