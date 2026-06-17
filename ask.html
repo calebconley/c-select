@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>© Select — Ask the Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6efe2; --bg2: #ead9c8; --bg3: #d4d2c2;
+  --ink: #220b00; --ink-mid: #3d1c08;
+  --tan: #a38a69; --tan-dim: #7a6248; --tan-glow: rgba(163,138,105,0.12);
+  --ivory: #f6efe2; --cream: #ead9c8; --linen: #d4d2c2; --muted: #8a7560;
+  --border: rgba(34,11,0,0.10); --border-mid: rgba(34,11,0,0.18);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; }
+body {
+  background: var(--bg);
+  color: var(--ink-mid);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+}
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 21px, rgba(34,11,0,0.06) 21px, rgba(34,11,0,0.06) 22px,
+    transparent 22px, transparent 27px, rgba(34,11,0,0.06) 27px, rgba(34,11,0,0.06) 28px,
+    transparent 28px, transparent 33px, rgba(34,11,0,0.06) 33px, rgba(34,11,0,0.06) 34px,
+    transparent 34px, transparent 39px, rgba(34,11,0,0.06) 39px, rgba(34,11,0,0.06) 40px,
+    transparent 40px, transparent 45px, rgba(34,11,0,0.06) 45px, rgba(34,11,0,0.06) 46px,
+    transparent 46px, transparent 84px
+  );
+}
+
+/* MASTHEAD */
+.masthead {
+  border-bottom: 2px solid rgba(34,11,0,0.12);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; background: var(--ivory);
+  position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+}
+.m-brand { display:flex; align-items:center; gap:12px; }
+.m-dot { width:7px; height:7px; border-radius:50%; background:var(--tan); flex-shrink:0; }
+.m-back { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--tan); text-decoration:none; }
+.m-back:hover { opacity:.7; }
+.m-sep { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); opacity:.4; margin:0 4px; }
+.m-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-mid); }
+.m-city { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); opacity:.5; }
+
+/* CHAT LAYOUT */
+.chat-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* INTRO */
+.intro {
+  padding: 40px 0 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.intro-eyebrow {
+  font-family: 'DM Mono', monospace; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--tan); margin-bottom:10px;
+  display:flex; align-items:center; gap:10px;
+}
+.intro-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--tan); }
+.intro-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 38px); font-weight:400; line-height:1.1;
+  letter-spacing:-.02em; color:var(--ink); margin-bottom:10px;
+}
+.intro-headline em { font-style:italic; color:var(--tan); }
+.intro-sub { font-size:14px; color:var(--ink-mid); line-height:1.8; max-width:500px; }
+
+/* SUGGESTIONS */
+.suggestions {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 28px;
+}
+.suggestion {
+  font-family: 'DM Mono', monospace; font-size:9px; letter-spacing:.1em;
+  text-transform:uppercase; padding:7px 14px;
+  border: 1px solid var(--border-mid);
+  color: var(--ink-mid); background:none; cursor:pointer;
+  transition: all .15s;
+}
+.suggestion:hover { border-color:var(--tan); color:var(--tan); background:var(--tan-glow); }
+
+/* MESSAGES */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+}
+
+.msg { display:flex; flex-direction:column; gap:6px; }
+.msg-role {
+  font-family: 'DM Mono', monospace; font-size:8.5px; letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.msg.user .msg-role { color:var(--tan); }
+.msg.assistant .msg-role { color:var(--muted); opacity:.6; }
+
+.msg-bubble {
+  padding: 14px 18px;
+  font-size: 14px; line-height: 1.8;
+}
+.msg.user .msg-bubble {
+  background: var(--ink); color: var(--ivory);
+  align-self: flex-end;
+  max-width: 80%;
+}
+.msg.assistant .msg-bubble {
+  background: var(--cream);
+  color: var(--ink-mid);
+  border-left: 3px solid var(--tan);
+}
+
+/* Spot cards inside assistant responses */
+.rec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: rgba(34,11,0,0.10);
+  margin-top: 14px;
+}
+.rec-card {
+  background: var(--ivory);
+  padding: 14px 16px;
+  display: flex; flex-direction:column; gap:6px;
+}
+.rec-card.top { background: var(--cream); }
+.rec-name { font-family:'Playfair Display',serif; font-size:15px; font-weight:400; color:var(--ink); line-height:1.2; }
+.rec-cat { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--tan); }
+.rec-note { font-size:12px; font-style:italic; color:var(--ink-mid); line-height:1.6; opacity:.8; }
+.rec-star { color:var(--tan); font-size:11px; }
+
+/* TYPING INDICATOR */
+.typing .msg-bubble {
+  display:flex; gap:5px; align-items:center; padding:16px 18px;
+}
+.typing-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--tan);
+  animation: bounce .9s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay:.15s; }
+.typing-dot:nth-child(3) { animation-delay:.3s; }
+@keyframes bounce {
+  0%,60%,100% { transform: translateY(0); opacity:.4; }
+  30% { transform: translateY(-5px); opacity:1; }
+}
+
+/* INPUT BAR */
+.input-bar {
+  position: sticky; bottom: 0;
+  background: var(--ivory);
+  border-top: 2px solid rgba(34,11,0,0.12);
+  padding: 16px 0 20px;
+  display: flex; gap: 10px; align-items: flex-end;
+  flex-shrink: 0;
+}
+.input-field {
+  flex: 1;
+  font-family: 'DM Sans', sans-serif; font-size:14px; font-weight:300;
+  color: var(--ink);
+  background: var(--cream);
+  border: 1px solid var(--border-mid);
+  padding: 12px 16px;
+  resize: none; outline: none;
+  line-height: 1.5;
+  min-height: 46px; max-height: 120px;
+  transition: border-color .15s;
+}
+.input-field:focus { border-color: var(--tan); }
+.input-field::placeholder { color: var(--muted); opacity:.6; }
+.send-btn {
+  font-family: 'DM Mono', monospace; font-size:9px; letter-spacing:.14em;
+  text-transform:uppercase;
+  background: var(--ink); color: var(--ivory);
+  border: none; padding: 0 20px; height:46px;
+  cursor: pointer; transition: opacity .15s; flex-shrink:0;
+}
+.send-btn:hover { opacity:.8; }
+.send-btn:disabled { opacity:.4; cursor:default; }
+
+@media(max-width:600px) {
+  .chat-wrap { padding:0 16px; }
+  .rec-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="masthead">
+  <div class="m-brand">
+    <div class="m-dot"></div>
+    <a href="detroit-guide.html" class="m-back">&#169; Select</a>
+    <span class="m-sep">/</span>
+    <span class="m-title">Detroit</span>
+    <span class="m-sep">/</span>
+    <span class="m-title">Ask</span>
+  </div>
+  <span class="m-city">AI Guide &mdash; &#9836;</span>
+</nav>
+
+<div class="chat-wrap">
+
+  <div class="intro">
+    <div class="intro-eyebrow">&#9836; Ask Anything</div>
+    <h1 class="intro-headline">What are you looking for in <em>Detroit?</em></h1>
+    <p class="intro-sub">Ask me for recommendations from the guide. Best spot for a date night, where to grab lunch in Midtown, a golf course for a group — I know the list.</p>
+  </div>
+
+  <div class="suggestions" id="suggestions">
+    <button class="suggestion" onclick="askSuggestion(this)">Best date night dinner</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Coffee shop to work from</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Where to go after midnight</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Best cheap eats</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Golf course for a group</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Must-do attractions for a visitor</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Best hotel lobby to post up</button>
+    <button class="suggestion" onclick="askSuggestion(this)">Where to shop Detroit brands</button>
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-bar">
+    <textarea
+      class="input-field"
+      id="input"
+      placeholder="Ask for a recommendation..."
+      rows="1"
+      onkeydown="handleKey(event)"
+      oninput="autoResize(this)"
+    ></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendMessage()">Send &#9836;</button>
+  </div>
+
+</div>
+
+<script>
+const GUIDE_DATA = "\nBREAKFAST [\u2605 = top pick]\n  \u2605 Norms (Classic, Diner) \u2014 A Detroit morning institution. No-frills, no-nonsense, exactly right.\n  \u2605 See You Tomorrow (Trendy, Creative) \u2014 The spot that made Detroit brunch feel like it actually belongs. Creative withou...\n  \u2605 Whistle Stop (Local, Neighborhood) \u2014 Neighborhood feel, solid execution. The kind of place locals protect.\n  \u00b7 Joe Louis Soul (Soul Food, Hearty) \u2014 Soul food in the morning hits different. This is the one.\n  \u00b7 Hudson Caf\u00e9 (Downtown, Sit-Down) \u2014 Downtown anchor for a proper sit-down morning. Good energy, reliable food.\n  \u00b7 Dime Store (Brunch, Popular) \u2014 Beloved for good reason. The brunch line is earned.\n  \u00b7 Brooklyn Street Local (Corktown, Neighborhood) \u2014 Corktown's neighborhood diner. The vibe is right every single time.\n  \u00b7 Haus of Brunch (Brunch, Elevated) \u2014 The name tells you everything. They take brunch seriously and it shows.\n  \u00b7 The Block (New Center, Versatile) \u2014 A New Center staple. Great for groups, great for solo. Just great.\n  \u00b7 Bev Bagels (Bagels, Morning) \u2014 The bagel situation in Detroit starts and ends here. Get there early.\n  \u00b7 Fred's (Classic, Casual) \u2014 Old school Detroit energy. Unpretentious and completely dependable.\n\nLUNCH [\u2605 = top pick]\n  \u2605 Baobao Fare (African, Unique) \u2014 West African flavors done with care. The kind of spot that feels like a discover...\n  \u2605 Fred's \u2014 Chicken Caesar Wrap (Wrap, Must-Order) \u2014 One item, no notes. The chicken Caesar wrap is the reason you go.\n  \u2605 Taqueria El Rey (Mexican, Tacos, Authentic) \u2014 The tacos here are the real thing. Mexicantown authenticity.\n  \u2605 Ima (Japanese, Comfort, Underrated) \u2014 Japanese comfort food. Udon, gyoza, and a warm room. Consistently underrated.\n  \u2605 Johnny Noodle King (Ramen, Corktown) \u2014 Ramen that Detroit has needed. Corktown spot, proper broth, worth every visit.\n  \u00b7 Fixins (Southern, Comfort) \u2014 Southern comfort food that doesn't cut corners. Perfect lunch stop.\n  \u00b7 Central (Downtown, Reliable) \u2014 The midday anchor downtown. Solid menu, good room.\n  \u00b7 Supinos (Pizza, Eastern Market) \u2014 Eastern Market pizza that earns every compliment it gets. Thin crust, serious sa...\n  \u00b7 Yum Village (Caribbean, Flavorful) \u2014 Afro-Caribbean spot that deserves more attention than it gets. Flavorful and fil...\n  \u00b7 Little Burger (Burger, Simple) \u2014 Small spot, big burger. Exactly what it says.\n  \u00b7 Babo (Korean, Interesting) \u2014 Korean-inspired and executed well. Good for when you want something interesting.\n  \u00b7 Bai Mai Thai (Thai, Must-Order) \u2014 The fried rice here is worth the trip alone. Everything else is also excellent.\n  \u00b7 Mudgies (Deli, Corktown, Sandwiches) \u2014 Corktown deli legend. The sandwich situation here is unmatched.\n  \u00b7 Grandma Bob's (Comfort, Homestyle) \u2014 Comfort food cooked with actual care. The name tracks.\n  \u00b7 Detroit 75 Kitchen (Bowls, Eastern Market) \u2014 Eastern Market truck turned institution. The broth bowls are the move.\n  \u00b7 Amar Pizza (Pizza, Unique) \u2014 Pizza from an unexpected angle. Worth the detour.\n  \u00b7 Boostan Cafe (Middle Eastern, Fresh) \u2014 Middle Eastern flavors done fresh and properly. An underrated gem.\n  \u00b7 Bucharest Grill (Shawarma, Late Night) \u2014 Shawarma that has a cult following for good reason. Late night too.\n  \u00b7 La Palma (Mexican, Neighborhood) \u2014 Mexican staple in the right neighborhood. Reliable and satisfying.\n  \u00b7 Frida (Mexican, Elevated) \u2014 Upscale Mexican that delivers on the elevated promise.\n  \u00b7 Shell Shock'd (Seafood, Boil) \u2014 Seafood boil energy. Great for a group, great for a solo mission.\n  \u00b7 J&T Kitchen (Neighborhood, Comfort) \u2014 Neighborhood spot with real flavor. The kind of place you want near your house.\n  \u00b7 La Lanterna (Italian, Cozy) \u2014 Italian lunch in a setting that makes it feel like more than just lunch.\n  \u00b7 Southern Fire (Hot Chicken, Southern) \u2014 Hot chicken with real heat and real flavor. No novelty, all substance.\n  \u00b7 Fork in Nigeria (Nigerian, African, Authentic) \u2014 Nigerian cuisine that's both accessible and authentic. A welcome addition to the...\n  \u00b7 Fishbone's (Creole, Institution) \u2014 A Detroit original. Creole-influenced, festive, and an institution.\n  \u00b7 Vicente's (Cuban, Unique) \u2014 Cuban-inspired spot that fills a gap in the Detroit lunch scene. Worth knowing.\n\nDINNER [\u2605 = top pick]\n  \u2605 Leila (Middle Eastern, Must Reserve) \u2014 The best dinner in Detroit right now. Middle Eastern-inspired and completely dia...\n  \u2605 Takoi (Southeast Asian, Beautiful Room) \u2014 Southeast Asian flavors in a room that's genuinely beautiful. One of Detroit's b...\n  \u2605 Vecinos (Mexican, Fine Dining) \u2014 Mexican fine dining that proves the format belongs here. Thoughtful and precise.\n  \u2605 Marrow on the Market (Farm-to-Table, Eastern Market) \u2014 Farm-to-table with a butcher program behind it. The quality shows on the plate.\n  \u00b7 Grey Ghost (American, Midtown, Upscale) \u2014 Midtown anchor. Serious American food with a room that earns the price.\n  \u00b7 Mad Nice (Italian, Occasion) \u2014 Italian American done with precision. The kind of place you go on a real occasio...\n  \u00b7 Barda (Spanish, Small Plates) \u2014 Spanish-inspired small plates. Order everything, regret nothing.\n  \u00b7 San Morello (Italian, Shinola Hotel, Pasta) \u2014 Southern Italian in the Shinola Hotel. Pasta is mandatory. The room is stunning.\n  \u00b7 Selden Standard (Farm-to-Table, Midtown, Reliable) \u2014 Midtown institution. Farm-to-table that stays relevant year after year.\n  \u00b7 Medusa (Greek, Ambitious) \u2014 Greek-inspired, ambitious, and landing. A newer entry making its case.\n  \u00b7 Cibo (Italian, Neighborhood, Pasta) \u2014 Neighborhood Italian that punches above its weight. The pasta program is serious...\n  \u00b7 Sunda (Asian, Groups) \u2014 Pan-Asian done with scale and confidence. Good for groups with range.\n  \u00b7 Alpino (European, Seasonal, Occasion) \u2014 Alpine European \u2014 fondue, raclette, and a room that feels like an occasion.\n  \u00b7 Ottava Via (Italian, East Side, Classic) \u2014 Old-school Italian on the east side. The chicken vesuvio alone justifies the tri...\n  \u00b7 Puma (American, Corktown, Creative) \u2014 Creative American in Corktown. The chef is doing something interesting here.\n  \u00b7 Bakersfield (Tacos, Bourbon, Casual) \u2014 Tacos and bourbon. The combination that works every single time.\n  \u00b7 Sexy Steak (Steakhouse, Elevated) \u2014 The name isn't lying. Steak that delivers on the promise.\n  \u00b7 Prime + Proper (Steakhouse, Classic, Downtown) \u2014 Detroit's proper steakhouse. Old-school format, very much intentional.\n  \u00b7 Townhouse (American, Birmingham, Rooftop) \u2014 Birmingham's elevated casual. The rooftop makes it in summer.\n  \u00b7 Parc (American, Patio, Campus Martius) \u2014 Campus Martius location means the patio is the draw in season. Food backs it up.\n  \u00b7 Besa (Mediterranean, Mezze) \u2014 Mediterranean that does the format right. The mezze spread is the move.\n  \u00b7 Midnight Temple (Late Night, Elevated) \u2014 Late night elevated dining. The kind of spot that feels like a secret.\n  \u00b7 El Barzon (Mexican, Italian, Southwest) \u2014 Mexican and Italian under one roof \u2014 and it works. A southwest Detroit legend.\n\nBAR [\u2605 = top pick]\n  \u2605 Evening Bar (Vibe, Cocktails, Low Key) \u2014 The vibe is the product here. Low lights, good drinks, right crowd.\n  \u2605 Candy Bar (Themed, Groups, Fun) \u2014 Fun, themed, and executed well. Great for a group that wants the experience.\n  \u2605 Father Forgive Me (Corktown, Cocktails) \u2014 Corktown spot with good drinks and the right amount of personality.\n  \u2605 Pine Hall (Cocktails, Cookies, Dual-Use) \u2014 Bar by night, but the cookies here are famous for a reason. Worth knowing about ...\n  \u2605 Kampers (Neighborhood, Reliable) \u2014 Neighborhood bar that does the simple things right. Reliable and unpretentious.\n  \u00b7 Bar Chenin (Wine, Natural Wine) \u2014 Natural wine list that could hold its own in any major city. The sleeper hit of ...\n  \u00b7 Monarch Club (Supper Club, Classic, Occasion) \u2014 Old-school supper club energy in a new Detroit package. Feels like an occasion.\n  \u00b7 Sugar House (Cocktails, Classic, Pioneer) \u2014 The cocktail bar that built Detroit's modern bar scene. Still the best.\n  \u00b7 Bad Luck Bar (Neighborhood, Casual) \u2014 Dive bar energy without being a dive. The balance is hard to hit and they hit it...\n  \u00b7 The Vinyl Society (Music, Records, Unique) \u2014 Records, drinks, and a crowd that knows both. A singular Detroit spot.\n  \u00b7 Saksey's (Dive, Casual, Authentic) \u2014 Dive bar that earns the title without irony. Cold beer, good people.\n  \u00b7 Keisling (Beer, German) \u2014 Newer addition with a German-inspired program. The beer list is taken seriously.\n  \u00b7 Vesper Book Bar (Books, Cocktails, Unique) \u2014 Books and cocktails. The concept sounds forced until you experience it.\n\nHOTEL LOBBIES [\u2605 = top pick]\n  \u2605 Shinola Hotel Living Room (Design, Active, Open) \u2014 The gold standard of Detroit hotel lobbies. Beautiful design, always active, ope...\n  \u2605 The Daxton (Birmingham, Boutique) \u2014 Birmingham's boutique anchor. A lobby worth sitting in for more than just a drin...\n  \u2605 Book Tower (Historic, Architecture, Atrium) \u2014 Historic Detroit architecture restored properly. The atrium alone is worth the v...\n  \u2605 AC Bonstelle (Theater, Boutique, Historic) \u2014 Newer boutique in a historic theater building. The backstory makes the lobby fee...\n  \u2605 Detroit Foundation Hotel (Historic, Converted) \u2014 Former fire department HQ. The lobby respects the building's past while being co...\n  \u00b7 The Godfrey (Rooftop, Pool, Scene) \u2014 The rooftop pool deck is the headline, but the lobby earns its place too.\n  \u00b7 The Siren Hotel (Midtown, Character, Boutique) \u2014 Midtown boutique with character. The interior is a genuine conversation.\n  \u00b7 David Whitney (Historic, Grand, Downtown) \u2014 Beaux-Arts grandeur in the middle of downtown. One of the most impressive lobbie...\n  \u00b7 Cambria (Modern, Downtown) \u2014 Clean, modern, central. Good baseline for downtown.\n  \u00b7 JW Marriott (Coming Soon, Anticipated) \u2014 Detroit's most anticipated hotel opening. Watch this space.\n\nGOLF [\u2605 = top pick]\n  \u2605 Paddle + Par (Social, Indoor, Concept) \u2014 Pickleball meets golf in a concept that works better than it sounds. Great for a...\n  \u2605 Oakland Hills (Major Venue, Historic, Prestigious) \u2014 Major championship venue. One of the most significant courses in American golf h...\n  \u2605 Warren Valley (Public, Underrated, Accessible) \u2014 Public gem. Underrated layout that rewards a proper game.\n  \u2605 TPC Michigan (Tour Quality, Challenging, Prestige) \u2014 Tour-caliber conditions. A proper test of a proper game.\n  \u2605 Rackham (Public, 9-Hole, Value) \u2014 Public Rackham is an underrated value. Nine holes, easy access, good layout.\n  \u00b7 5Iron (Indoor, Simulator, Downtown) \u2014 Indoor golf simulator done right. Downtown location makes it easy to drop in.\n  \u00b7 DAC (Private, Historic, Exclusive) \u2014 Detroit Athletic Club \u2014 historic and exclusive. Earn your invite.\n  \u00b7 DGC (Private, Donald Ross, Pedigree) \u2014 Detroit Golf Club. Donald Ross courses, serious pedigree. Bucket list if you can...\n  \u00b7 Evergreen (Public, History, Value) \u2014 Southeast Detroit public course with history. Good value, real conditions.\n  \u00b7 Belle Isle Range (Range, Scenic, Unique) \u2014 Hitting balls on Belle Isle with the river as your backdrop. Nowhere else does t...\n  \u00b7 Royal Oak Golf Center (Range, Suburban, Reliable) \u2014 Suburban range with good infrastructure. Reliable warm-up destination.\n  \u00b7 Cardinal at Saint John (Hidden Gem, Unique Setting) \u2014 Hidden gem in a seminary setting. The backstory makes the round.\n  \u00b7 Shepherd's Hollow (Public, Worth the Drive, Top Course) \u2014 North of the city but worth every mile. One of the best public courses in Michig...\n  \u00b7 Chandler Park (Public, East Side, Affordable) \u2014 East side public course. Affordable, accessible, and part of the neighborhood fa...\n  \u00b7 Rouge Park (Public, West Side, Community) \u2014 West side public course. Affordable, accessible, important to the community.\n\nPARTIES [\u2605 = top pick]\n  \u2605 Big Pink (High Energy, Scene, Detroit) \u2014 The kind of party where the energy is self-generating. Detroit nightlife at its ...\n  \u2605 The Belt & Delux Flux (Art, Alley, Unique) \u2014 Alley venue that transforms. Art + nightlife combination that Detroit does uniqu...\n  \u2605 Love & Tequila (Latin, Dancing, Lively) \u2014 The name is the vibe. Latin-leaning energy in a room built for it.\n  \u00b7 Spotlite (Club, DJs, Late Night) \u2014 Detroit's actual club. Good DJs, crowd that moves, vibe that can't be manufactur...\n  \u00b7 Northern Lights (Lounge, DJs, Mature) \u2014 Lounge format with serious DJ programming. More grown than the club circuit.\n  \u00b7 Bloom (Intimate, Intentional) \u2014 Intimate and intentional. The crowd knows why they're there.\n  \u00b7 Paramita (Underground, Bookings, Music) \u2014 Underground energy above ground. The bookings are consistently interesting.\n  \u00b7 TV Lounge (Classic, Longstanding) \u2014 A Detroit original. Long-running, no-gimmick nightlife that keeps being relevant...\n  \u00b7 Pocket Change (Newer, Emerging) \u2014 Newer entry with a strong early reputation. Watch this one.\n\nCAFES [\u2605 = top pick]\n  \u2605 Mad Nice Goods (Coffee, Goods, Aesthetic) \u2014 The retail extension of Mad Nice. Coffee, goods, and the same aesthetic that mak...\n  \u2605 La Veneta (Italian, Espresso, Serious) \u2014 Italian coffee culture imported and executed right. The espresso here is not a j...\n  \u2605 Cafe Sous Terre (Underground, European, Unique) \u2014 Underground (literally) cafe with serious European coffee sensibility.\n  \u00b7 Dose (Specialty, Single Cup, Quiet) \u2014 Specialty coffee done with intention. One of the better single-cup experiences i...\n  \u00b7 Sml Wrlds (Intimate, Specialty) \u2014 Small world, big coffee. Intimate and exactly right.\n  \u00b7 Lucky (Work-Friendly, Midtown, Reliable) \u2014 Midtown cafe with consistent quality and a good room to work in.\n  \u00b7 Madcap (Specialty, Consistent) \u2014 Grand Rapids import that translates well to Detroit. Specialty program that's co...\n  \u00b7 Cred Cafe (Community, Neighborhood) \u2014 Community-oriented cafe that earns the neighborhood's trust and yours.\n  \u00b7 Alba (Design, Morning, Bright) \u2014 Bright, well-designed, and a serious coffee list. Good morning option.\n  \u00b7 Saturn Coffee (Community, East Side, Institution) \u2014 The coffee shop that doubles as a community anchor. East side institution.\n\nATTRACTIONS [\u2605 = top pick]\n  \u2605 Belle Isle (Free, Nature, Iconic) \u2014 An island state park in the middle of the Detroit River. Sunrise here is the bes...\n  \u2605 Eastern Market (Saturday, Market, Community) \u2014 Saturday mornings only. The whole city shows up. Get there before 10.\n  \u2605 Michigan Central Train Station (Architecture, Ford, Historic, Landmark) \u2014 Restored Beaux-Arts landmark. One of the most dramatic architectural resurrectio...\n  \u00b7 DIA \u2014 Detroit Institute of Arts (Art, Free (Residents), World-Class) \u2014 Top-five art museum in the country. The Rivera Court murals alone justify the vi...\n  \u00b7 MOCAD (Contemporary Art, Midtown) \u2014 Contemporary art in Midtown. The programming is consistently worth checking.\n  \u00b7 Library Street Collective (Gallery, Murals, Contemporary) \u2014 Gallery that has helped define Detroit's contemporary art identity.\n  \u00b7 Little Village (Mexicantown, Authentic, Food) \u2014 Mexicantown's commercial heart. The food, bakeries, and energy are the real Detr...\n  \u00b7 Riverfront & RiverWalk (Waterfront, Walk, Free) \u2014 Miles of waterfront that most people under-use. The best urban walk in Detroit.\n  \u00b7 Campus Martius (Downtown, Seasonal, Active) \u2014 Downtown's living room. Ice skating in winter, concerts in summer, always active...\n  \u00b7 Guardian Building (Art Deco, Architecture, Lobby) \u2014 Art Deco masterpiece. Walk into the lobby and look up. Do it every time.\n  \u00b7 Motown Museum (Music, History, Iconic) \u2014 Hitsville USA. The origin of an entire chapter of American music history.\n  \u00b7 Detroit Historical Museum (History, Museum) \u2014 The city's own story, told well. Streets of Old Detroit is worth the visit alone...\n  \u00b7 Charles H. Wright Museum (History, African American, World-Class) \u2014 African American history museum that punches well above its weight nationally.\n  \u00b7 Michigan Science Center (Family, Science, Planetarium) \u2014 Great for bringing people in from out of town. The planetarium still hits.\n  \u00b7 Detroit Lions at Ford Field (NFL, Ford Field, Electric) \u2014 Ford Field is one of the best indoor stadiums in the NFL. The atmosphere has com...\n  \u00b7 Detroit Tigers at Comerica Park (MLB, Summer, Skyline) \u2014 Summer evening baseball with the Detroit skyline as your backdrop. Easy to get c...\n  \u00b7 Detroit Red Wings at LCA (NHL, Hockey, LCA) \u2014 Little Caesars Arena is a genuinely great hockey venue.\n  \u00b7 Detroit Pistons at LCA (NBA, LCA, Early Adopter) \u2014 The Pistons era is loading. Get in early while the tickets are still reasonable.\n\nSPORTS BARS [\u2605 = top pick]\n  \u2605 Gilly's (Classic, Comfortable) \u2014 Classic Detroit sports bar. Unpretentious, always on, comfortable.\n  \u2605 Parlay (Betting, Screens, Modern) \u2014 Sports betting energy meets good screens. The format works for the moment.\n  \u2605 Collect Beer Bar (Craft Beer, Curated) \u2014 Craft beer list that's actually curated. The games are secondary but still there...\n  \u2605 Sidecar Slider Bar (Sliders, Casual) \u2014 Sliders and sports. The sliders are better than you'd expect and the format is e...\n  \u00b7 MGM Grand Sports Bar (Scale, Big Games, Casino) \u2014 When scale matters. Screens everywhere, everything covered. Good for big playoff...\n  \u00b7 Checker Bar (Downtown, Original, Darts) \u2014 Downtown Detroit original. The dart setup and the jukebox are part of the deal.\n  \u00b7 Lockerroom (Neighborhood, Reliable) \u2014 The neighborhood sports bar format done without overthinking it.\n  \u00b7 24 Seconds Bar & Grill (Basketball, Vibe) \u2014 Named after the shot clock. Basketball is the vibe but all sports are welcome.\n  \u00b7 Bucharest Grill (Shawarma, Food-Forward) \u2014 Shawarma bar that has screens. The food is why you're here.\n  \u00b7 Roar Brewery (Brewery, Lions, Beer) \u2014 Lions-adjacent and brewing their own. The beer + sports combination is earned.\n  \u00b7 Madhouse Bar & Grill (Wings, Kitchen) \u2014 Wings-first sports bar with a kitchen that can actually back it up.\n\nCOWORKING [\u2605 = top pick]\n  \u2605 Michigan Central / Newlab (Ambitious, Ford, Historic) \u2014 The most ambitious coworking-adjacent space in Detroit. Ford's innovation campus...\n  \u2605 Techtown (Startup, Network, Established) \u2014 Startup-focused hub that's been in the game. The network here matters.\n  \u2605 The Congregation (Community, Converted, Architecture) \u2014 Church-turned-coworking. The architecture is the bonus. The community is the act...\n  \u00b7 Chroma (Design, Aesthetic, Creative) \u2014 Design-forward coworking with the right aesthetic. Good if the room matters to y...\n  \u00b7 Seasons Grocery (Cafe, Grocery, Hybrid) \u2014 Cafe-grocery hybrid that doubles as a great work spot. The format makes the work...\n  \u00b7 Bamboo (Focused, Clean) \u2014 Focused coworking without the noise. Gets the basics right.\n  \u00b7 Jefferson Hub (East Side, Community) \u2014 East side anchor for the coworking scene. Community-first approach.\n  \u00b7 Hunt Street (Eastern Market, Location) \u2014 Eastern Market adjacent coworking. The location makes the day better.\n  \u00b7 Workco Birmingham (Birmingham, Suburban, Premium) \u2014 Suburban coworking for when you need to be out of the city. Birmingham's best op...\n\nSHOPPING [\u2605 = top pick]\n  \u2605 Carhartt (Flagship, Workwear, Detroit) \u2014 The Detroit original. Carhartt's flagship is a pilgrimage for anyone who knows t...\n  \u2605 Periodical (Books, Magazines, Third Space) \u2014 Independent magazine and book shop done with genuine curation. One of the better...\n  \u2605 Shinola (Luxury, Made in Detroit, Flagship) \u2014 Detroit's luxury export. Watches, leather goods, bikes \u2014 all made here. The flag...\n  \u2605 Xhibition (Sneakers, Streetwear, Boutique) \u2014 Detroit's premier sneaker and streetwear boutique. The curation is tight and the...\n  \u2605 Lip Bar (Beauty, Detroit-Founded, Flagship) \u2014 Detroit-founded beauty brand that made it national. The flagship is a statement....\n  \u00b7 Coup D'\u00e9tat (Menswear, Elevated, Curated) \u2014 Elevated menswear with a point of view. The kind of shop that makes you reconsid...\n  \u00b7 Detroit Vs Everybody (Detroit, Statement, Apparel) \u2014 The city's most recognizable brand. Wear it as a statement, buy it as a souvenir...\n  \u00b7 Greyson (Performance, Apparel, Clean) \u2014 Performance-meets-lifestyle apparel. Clean aesthetics, functional design, worth ...\n  \u00b7 Folk (Home Goods, Lifestyle, Gifts) \u2014 Home goods and lifestyle objects with a considered aesthetic. Good for gifts, be...\n  \u00b7 Two18 (Streetwear, Local, Boutique) \u2014 Detroit streetwear boutique with local flavor. Supporting this one matters.\n  \u00b7 Sana (Wellness, Beauty, Curated) \u2014 Wellness and beauty with an intentional selection. An underrepresented category ...\n";
+const BEST_BITES = "Best Pizza: Michigan & Trumbull \u2014 The Detroit original\nBest Cookies: RH or Pine Hall \u2014 Two different moods, both win\nBest Ice Cream: Milk & Froth or Huddle \u2014 Seasonal, worth it\nBest Burger: Marrow or Grey Ghost \u2014 Depends on your mood\nBest Wings: Wing Fellas or Sweetwaters \u2014 Both are required\nBest Smoothie: Toastique \u2014 Properly done\nBest Bagel: Bev Bagels \u2014 No contest\nBest Wrap: Frank's \u2014 One item, order it\nBest Fried Rice: Bai Mai Thai \u2014 Go for this specifically\nBest Coney: L. George's or Lafayette \u2014 The eternal debate";
+
+const SYSTEM_PROMPT = `You are the AI guide for The © Select — a personal, curated city guide for Detroit created by Caleb Conley. Your job is to give specific, confident recommendations from the guide.
+
+PERSONALITY:
+- Talk like a knowledgeable friend who actually lives in Detroit, not a generic assistant
+- Be direct and opinionated — say "go to X" not "you might consider X"
+- Keep responses concise but warm. 2-4 recommendations max unless they ask for more
+- Reference specific details from the guide when relevant
+- Use "the guide" or "my list" naturally, not "the database"
+- Never make up spots that aren't in the guide
+
+THE GUIDE DATA (★ = top pick in that category):
+${GUIDE_DATA}
+
+BEST BITES (definitive picks by category):
+${BEST_BITES}
+
+RESPONSE FORMAT:
+- Lead with a short direct answer (1-2 sentences)
+- Then give 2-4 specific spot recommendations
+- For each spot include: name, why it fits, and a short note from the guide
+- End with a one-line practical tip if relevant
+- Keep the whole response under 200 words unless they ask for a full breakdown
+
+When recommending spots, format them clearly so they stand out. Always recommend from the actual guide data above.`;
+
+let messages = [];
+let isLoading = false;
+
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 120) + "px";
+}
+
+function handleKey(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function askSuggestion(btn) {
+  document.getElementById("input").value = btn.textContent;
+  document.getElementById("suggestions").style.display = "none";
+  sendMessage();
+}
+
+function appendMessage(role, content, isTyping) {
+  const msgs = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "msg " + role + (isTyping ? " typing" : "");
+  if (isTyping) {
+    div.id = "typing-indicator";
+    div.innerHTML = `
+      <div class="msg-role">&#169; Select Guide</div>
+      <div class="msg-bubble">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>`;
+  } else {
+    const roleLabel = role === "user" ? "You" : "&#169; Select Guide";
+    div.innerHTML = `<div class="msg-role">${roleLabel}</div><div class="msg-bubble">${formatResponse(content)}</div>`;
+  }
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function formatResponse(text) {
+  // Bold **text**
+  text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  // Spot names in recs — lines starting with number or dash
+  text = text.replace(/^([\d]+\.\s|[-•]\s)(.+)$/gm, (match, bullet, content) => {
+    return `<div style="margin:8px 0 4px;padding-left:12px;border-left:2px solid var(--tan);font-family:'DM Mono',monospace;font-size:11px;">${content}</div>`;
+  });
+  // Newlines to breaks
+  text = text.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>");
+  return text;
+}
+
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = "";
+  input.style.height = "auto";
+  document.getElementById("send-btn").disabled = true;
+  document.getElementById("suggestions").style.display = "none";
+  isLoading = true;
+
+  // Add user message
+  messages.push({ role: "user", content: text });
+  appendMessage("user", text);
+
+  // Show typing
+  appendMessage("assistant", "", true);
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: messages
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content && data.content[0] ? data.content[0].text : "Sorry, I couldn't get a response. Try again.";
+
+    // Remove typing indicator
+    const typing = document.getElementById("typing-indicator");
+    if (typing) typing.remove();
+
+    messages.push({ role: "assistant", content: reply });
+    appendMessage("assistant", reply);
+
+  } catch(e) {
+    const typing = document.getElementById("typing-indicator");
+    if (typing) typing.remove();
+    appendMessage("assistant", "Something went wrong. Try refreshing and asking again.");
+    console.error(e);
+  }
+
+  isLoading = false;
+  document.getElementById("send-btn").disabled = false;
+  document.getElementById("input").focus();
+}
+</script>
+</body>
+</html>
